@@ -1,0 +1,6 @@
+{
+	"ImportPath": "github.com/mamal72/dgkala",
+	"GoVersion": "go1.7",
+	"GodepVersion": "v75",
+	"Deps": []
+}

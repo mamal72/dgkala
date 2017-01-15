@@ -64,11 +64,11 @@ func SpecialOffers() ([]SpecialOffer, error) {
 	if err != nil {
 		return nil, err
 	}
-	var specialOffersResponse specialOffersResponse
-	err = json.Unmarshal(body, &specialOffersResponse)
+	offersResponse := &specialOffersResponse{}
+	err = json.Unmarshal(body, offersResponse)
 	if err != nil {
 		return nil, err
 	}
-	specialOffers := specialOffersResponse.Data
+	specialOffers := offersResponse.Data
 	return specialOffers, nil
 }

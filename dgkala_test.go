@@ -40,27 +40,27 @@ func Test_sendRequest(t *testing.T) {
 	}
 }
 
-func TestSpecialOffers(t *testing.T) {
+func TestIncredibleOffers(t *testing.T) {
 	tests := []struct {
 		name     string
 		wantType string
 		wantErr  bool
 	}{
 		{
-			name:     "Test should return a slice of special offers",
-			wantType: "[]dgkala.SpecialOffer",
+			name:     "Test should return a slice of incredible offers",
+			wantType: "[]dgkala.IncredibleOffer",
 			wantErr:  false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := SpecialOffers()
+			got, err := IncredibleOffers()
 			if (err != nil) != tt.wantErr {
-				t.Errorf("SpecialOffers() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("IncredibleOffers() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if reflect.TypeOf(got).String() != tt.wantType {
-				t.Errorf("type of SpecialOffers() = %v, want type of %v", reflect.TypeOf(got), tt.wantType)
+				t.Errorf("type of IncredibleOffers() = %v, want type of %v", reflect.TypeOf(got), tt.wantType)
 			}
 		})
 	}

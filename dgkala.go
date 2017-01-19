@@ -6,20 +6,24 @@ import (
 	"net/http"
 )
 
-const apiAddress = "https://service2.digikala.com/api/IncredibleOffer/GetIncredibleOffer"
+const (
+	incredibleOffersAPIAddress = "https://service2.digikala.com/api/IncredibleOffer/GetIncredibleOffer"
+)
 
 // ImagePath is a struct containing the product images in various sizes
-type ImagePath struct {
-	Original, Size70, Size110, Size180, Size220 string
-}
+// type ImagePath struct {
+// 	Original, Size70, Size110, Size180, Size220 string
+// }
 
-// SpecialOffer is a struct containing
-// DGKala special offer properties
-type SpecialOffer struct {
-	ID                 uint
-	ProductID          uint
-	Title              string
-	ImagePaths         ImagePath
+// IncredibleOffer is a struct containing
+// DGKala incredible offer properties
+type IncredibleOffer struct {
+	ID         uint
+	ProductID  uint
+	Title      string
+	ImagePaths struct {
+		Original, Size70, Size110, Size180, Size220 string
+	}
 	BannerPath         string
 	BannerPathMobile   string
 	BannerPathTablet   string
@@ -32,8 +36,8 @@ type SpecialOffer struct {
 	OnlyForMembers     bool
 }
 
-type specialOffersResponse struct {
-	Data   []SpecialOffer
+type incredibleOffersResponse struct {
+	Data   []IncredibleOffer
 	Status string
 }
 
@@ -52,10 +56,10 @@ func sendRequest(address string, headers map[string]string) (*http.Response, err
 	return response, err
 }
 
-// SpecialOffers returns a slice of DGKala SpecialOffer
-func SpecialOffers() ([]SpecialOffer, error) {
+// IncredibleOffers get a slice of DGKala IncredibleOffer items
+func IncredibleOffers() ([]IncredibleOffer, error) {
 	headers := map[string]string{"ApplicationVersion": "1.3.2"}
-	response, err := sendRequest(apiAddress, headers)
+	response, err := sendRequest(incredibleOffersAPIAddress, headers)
 	if err != nil {
 		return nil, err
 	}
@@ -64,11 +68,11 @@ func SpecialOffers() ([]SpecialOffer, error) {
 	if err != nil {
 		return nil, err
 	}
-	offersResponse := &specialOffersResponse{}
+	offersResponse := &incredibleOffersResponse{}
 	err = json.Unmarshal(body, offersResponse)
 	if err != nil {
 		return nil, err
 	}
-	specialOffers := offersResponse.Data
-	return specialOffers, nil
+	IncredibleOffers := offersResponse.Data
+	return IncredibleOffers, nil
 }

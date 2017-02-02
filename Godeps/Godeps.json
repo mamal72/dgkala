@@ -2,5 +2,10 @@
 	"ImportPath": "github.com/mamal72/dgkala",
 	"GoVersion": "go1.7",
 	"GodepVersion": "v75",
-	"Deps": []
+	"Deps": [
+		{
+			"ImportPath": "github.com/buger/jsonparser",
+			"Rev": "f04e003e4115787c6272636780bc206e5ffad6c4"
+		}
+	]
 }

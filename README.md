@@ -6,7 +6,7 @@
 
 # dgkala
 
-This is a simple Go package to interact with [Digikala](https://www.digikala.com) website. It's a WIP and more methods may be added in the future.
+This is a simple Go package to interact with [Digikala](https://www.digikala.com) website.
 
 
 ## Installation
@@ -24,8 +24,13 @@ package main
 import "github.com/mamal72/dgkala"
 
 func main() {
-    // Get special offers
-    offers, err := dgkala.SpecialOffers() // []SpecialOffer, error
+    // Get incredible offers
+    offers, err := dgkala.IncredibleOffers() // []IncredibleOffer, error
+    fmt.Printf("%+v\n", offers)
+
+    // Search for a product by a string keyword
+    searchResult, err := dgkala.Search("case-logic-dlbp") // SearchResult, error
+    fmt.Printf("%+v\n", searchResult)
 }
 ```
 
@@ -38,6 +43,7 @@ go test
 
 
 ## Ideas || Issues
+
 Just fill an issue and describe it. I'll check it ASAP!
 
 

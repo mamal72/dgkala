@@ -13,8 +13,8 @@ import (
 
 const (
 	incredibleOffersAPIAddress = "https://service2.digikala.com/api/IncredibleOffer/GetIncredibleOffer"
-	searchAPIAddress           = "https://search.digikala.com/api/search"
-	staticFilesPath            = "https://file.digikala.com/digikala/"
+	searchAPIAddress           = "https://search.digikala.com/api/search?keyword=%s"
+	staticFilesPath            = "https://file.digikala.com/digikala/%s"
 )
 
 // ProductExistsStatus is a iota type for product existing status for buying
@@ -115,12 +115,12 @@ func sendRequest(address string, headers map[string]string) (*http.Response, err
 }
 
 func getStaticResourceAddress(resourcePath string) string {
-	return fmt.Sprintf("%s%s", staticFilesPath, resourcePath)
+	return fmt.Sprintf(staticFilesPath, resourcePath)
 }
 
 func getSearchAPIAddress(keyword string) string {
 	query := url.QueryEscape(keyword)
-	return fmt.Sprintf("%s?keyword=%s", searchAPIAddress, query)
+	return fmt.Sprintf(searchAPIAddress, query)
 }
 
 // IncredibleOffers get a slice of DGKala IncredibleOffer items
@@ -135,13 +135,13 @@ func IncredibleOffers() ([]IncredibleOffer, error) {
 	if err != nil {
 		return nil, err
 	}
-	offersResponse := &incredibleOffersResponse{}
+	var offersResponse incredibleOffersResponse
 	err = json.Unmarshal(body, offersResponse)
 	if err != nil {
 		return nil, err
 	}
-	IncredibleOffers := offersResponse.Data
-	return IncredibleOffers, nil
+	incredibleOffers := offersResponse.Data
+	return incredibleOffers, nil
 }
 
 // Search for a product in DGKala and return a slice of DGKala SearchResult items

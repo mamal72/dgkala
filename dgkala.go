@@ -125,7 +125,7 @@ func getSearchAPIAddress(keyword string) string {
 
 // IncredibleOffers get a slice of DGKala IncredibleOffer items
 func IncredibleOffers() ([]IncredibleOffer, error) {
-	headers := map[string]string{"ApplicationVersion": "1.3.2"}
+	headers := map[string]string{"ApplicationVersion": "1.4.1"}
 	response, err := sendRequest(incredibleOffersAPIAddress, headers)
 	if err != nil {
 		return nil, err

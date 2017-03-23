@@ -20,7 +20,7 @@ func Test_sendRequest(t *testing.T) {
 			name: "Test should send request and receive a 200 respose",
 			args: args{
 				address: "http://icanhazip.com/",
-				headers: map[string]string{"ApplicationVersion": "1.3.2"},
+				headers: map[string]string{"ApplicationVersion": "1.4.1"},
 			},
 			want:    200,
 			wantErr: false,

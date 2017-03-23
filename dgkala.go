@@ -172,8 +172,8 @@ func Search(keyword string) (SearchResult, error) {
 	parentJSONResultKey := "_source"
 	jsonparser.ArrayEach(responseBody, func(value []byte, _ jsonparser.ValueType, _ int, _ error) {
 		ID, _ := jsonparser.GetInt(value, parentJSONResultKey, "Id")
-		persianTitle, _ := jsonparser.GetString(value, parentJSONResultKey, "FaTitle")
 		englishTitle, _ := jsonparser.GetString(value, parentJSONResultKey, "EnTitle")
+		persianTitle, _ := jsonparser.GetString(value, parentJSONResultKey, "FaTitle")
 		imagePath, _ := jsonparser.GetString(value, parentJSONResultKey, "ImagePath")
 		image := getStaticResourceAddress(imagePath)
 		existsStatusInt, _ := jsonparser.GetInt(value, parentJSONResultKey, "ExistStatus")
@@ -212,8 +212,8 @@ func Search(keyword string) (SearchResult, error) {
 
 		currentProductSearchResult := ProductSearchResult{
 			ID,
-			persianTitle,
 			englishTitle,
+			persianTitle,
 			image,
 			existsStatus,
 			isActive,

@@ -1,0 +1,9 @@
+package: github.com/mamal72/dgkala
+homepage: https://github.com/mamal72
+license: MIT
+owners:
+- name: Mohamad Jahani
+  email: m4m4lj@gmail.com
+email: m4m4lj@gmail.com
+import:
+- package: github.com/buger/jsonparser

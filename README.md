@@ -21,7 +21,11 @@ go get github.com/mamal72/dgkala
 ```go
 package main
 
-import "github.com/mamal72/dgkala"
+import (
+    "fmt"
+
+    "github.com/mamal72/dgkala"
+)
 
 func main() {
     // Get incredible offers
@@ -31,6 +35,10 @@ func main() {
     // Search for a product by a string keyword
     searchResult, err := dgkala.Search("case-logic-dlbp") // SearchResult, error
     fmt.Printf("%+v\n", searchResult)
+
+    // Get details of a product by ID
+    productByID, err := dgkala.GetProductByID(6071) // ProductByID, error
+    fmt.Printf("%+v\n", productByID)
 }
 ```
 

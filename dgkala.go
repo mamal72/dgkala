@@ -15,7 +15,10 @@ const (
 	incredibleOffersAPIAddress = "https://service2.digikala.com/api/IncredibleOffer/GetIncredibleOffer"
 	searchAPIAddress           = "https://search.digikala.com/api/search?keyword=%s"
 	staticFilesPath            = "https://file.digikala.com/digikala/%s"
+	productByIDAPIAddress      = "https://service2.digikala.com/api/ProductCache/GetProductById/%d"
 )
+
+type requestHeader map[string]string
 
 // ProductExistsStatus is a iota type for product existing status for buying
 type ProductExistsStatus int
@@ -31,15 +34,18 @@ const (
 	Discontinued
 )
 
+// ImagePaths contains a product images in various sizes
+type ImagePaths struct {
+	Original, Size70, Size110, Size180, Size220 string
+}
+
 // IncredibleOffer is a struct containing
 // DGKala incredible offer properties
 type IncredibleOffer struct {
-	ID         uint
-	ProductID  uint
-	Title      string
-	ImagePaths struct {
-		Original, Size70, Size110, Size180, Size220 string
-	}
+	ID                 uint
+	ProductID          uint
+	Title              string
+	ImagePaths         ImagePaths
 	BannerPath         string
 	BannerPathMobile   string
 	BannerPathTablet   string
@@ -99,7 +105,25 @@ type SearchResult struct {
 	Results      []ProductSearchResult
 }
 
-func sendRequest(address string, headers map[string]string) (*http.Response, error) {
+// ProductByIDResult returns a struct containing results of the request for product details by ID
+type ProductByIDResult struct {
+	Data ProductByID
+}
+
+// ProductByID is a struct containing a product details when you get it by ID
+type ProductByID struct {
+	ID                uint `json:"ProductId"`
+	EnglishTitle      string
+	PersianTitle      string
+	Description       string
+	ImagePaths        ImagePaths
+	IsIncredibleOffer bool
+	Strengths         string
+	Weaknesses        string
+	MinPrice          uint
+}
+
+func sendRequest(address string, headers requestHeader) (*http.Response, error) {
 	request, err := http.NewRequest(http.MethodGet, address, nil)
 	if err != nil {
 		return nil, err
@@ -109,9 +133,8 @@ func sendRequest(address string, headers map[string]string) (*http.Response, err
 		request.Header.Add(key, value)
 	}
 
-	client := http.Client{}
-	response, err := client.Do(request)
-	return response, err
+	var client http.Client
+	return client.Do(request)
 }
 
 func getStaticResourceAddress(resourcePath string) string {
@@ -123,9 +146,17 @@ func getSearchAPIAddress(keyword string) string {
 	return fmt.Sprintf(searchAPIAddress, query)
 }
 
+func getProductByIDAPIAddress(productID int) string {
+	return fmt.Sprintf(productByIDAPIAddress, productID)
+}
+
+func getRequestHeaders() requestHeader {
+	return map[string]string{"ApplicationVersion": "1.4.1"}
+}
+
 // IncredibleOffers get a slice of DGKala IncredibleOffer items
 func IncredibleOffers() ([]IncredibleOffer, error) {
-	headers := map[string]string{"ApplicationVersion": "1.4.1"}
+	headers := getRequestHeaders()
 	response, err := sendRequest(incredibleOffersAPIAddress, headers)
 	if err != nil {
 		return nil, err
@@ -136,7 +167,7 @@ func IncredibleOffers() ([]IncredibleOffer, error) {
 		return nil, err
 	}
 	var offersResponse incredibleOffersResponse
-	err = json.Unmarshal(body, offersResponse)
+	err = json.Unmarshal(body, &offersResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -147,7 +178,7 @@ func IncredibleOffers() ([]IncredibleOffer, error) {
 // Search for a product in DGKala and return a slice of DGKala SearchResult items
 func Search(keyword string) (SearchResult, error) {
 	searchAddress := getSearchAPIAddress(keyword)
-	httpResponse, err := http.Get(searchAddress)
+	httpResponse, err := sendRequest(searchAddress, requestHeader{})
 	if err != nil {
 		return SearchResult{}, err
 	}
@@ -246,4 +277,24 @@ func Search(keyword string) (SearchResult, error) {
 	}
 
 	return result, nil
+}
+
+// GetProductByID returns a product by getting it's ID
+func GetProductByID(productID int) (ProductByID, error) {
+	headers := getRequestHeaders()
+	apiAddress := getProductByIDAPIAddress(productID)
+
+	httpResponse, err := sendRequest(apiAddress, headers)
+
+	body, err := ioutil.ReadAll(httpResponse.Body)
+	if err != nil {
+		return ProductByID{}, err
+	}
+	var productByIDResult ProductByIDResult
+	err = json.Unmarshal(body, &productByIDResult)
+	if err != nil {
+		return ProductByID{}, err
+	}
+	product := productByIDResult.Data
+	return product, nil
 }

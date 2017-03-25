@@ -112,9 +112,9 @@ type ProductByIDResult struct {
 
 // ProductByID is a struct containing a product details when you get it by ID
 type ProductByID struct {
-	ID                uint `json:"ProductId"`
-	EnglishTitle      string
-	PersianTitle      string
+	ID                uint   `json:"ProductId"`
+	EnglishTitle      string `json:"EnTitle"`
+	PersianTitle      string `json:"FaTitle"`
 	Description       string
 	ImagePaths        ImagePaths
 	IsIncredibleOffer bool
